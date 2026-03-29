@@ -1,0 +1,36 @@
+<footer class="site-footer">
+    <div class="footer-content">
+        <p>&copy; {{ now.Year }} {{ .Site.Title }}. All rights reserved.</p>
+        {{ if .Site.Params.footer_links }}
+            <div class="footer-links">
+                {{ range .Site.Params.footer_links }}
+                    <a href="{{ .url }}">{{ .name }}</a>
+                {{ end }}
+            </div>
+        {{ end }}
+    </div>
+</footer>
+
+<style>
+.site-footer {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e9ecef;
+    text-align: center;
+    color: #6c757d;
+}
+
+.footer-links {
+    margin-top: 1rem;
+}
+
+.footer-links a {
+    margin: 0 0.5rem;
+    color: #6c757d;
+    text-decoration: none;
+}
+
+.footer-links a:hover {
+    color: #007bff;
+}
+</style>
