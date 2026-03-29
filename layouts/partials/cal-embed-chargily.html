@@ -1,0 +1,94 @@
+{{ $config := site.Data.cal_config }} {{ $settings := $config.default_settings
+}} {{ $chargily := $config.chargily }}
+
+<!-- Chargily Payment Integration -->
+{{ partial "chargily-payment.html" . }}
+
+<!-- Cal inline embed code begins -->
+<div
+  style="width:100%; height:{{ $settings.height }}; overflow:scroll"
+  id="my-cal-inline-{{ .namespace }}"
+></div>
+<script type="text/javascript">
+  (function (C, A, L) {
+    let p = function (a, ar) { a.q.push(ar); };
+    let d = C.document;
+    C.Cal = C.Cal || function () {
+      let cal = C.Cal;
+      let ar = arguments;
+      if (!cal.loaded) {
+        cal.ns = {};
+        cal.q = cal.q || [];
+        d.head.appendChild(d.createElement("script")).src = A;
+        cal.loaded = true;
+      }
+      if (ar[0] === L) {
+        const api = function () { p(api, arguments); };
+        const namespace = ar[1];
+        api.q = api.q || [];
+        if(typeof namespace === "string"){
+          cal.ns[namespace] = cal.ns[namespace] || api;
+          p(cal.ns[namespace], ar);
+          p(cal, ["initNamespace", namespace]);
+        } else p(cal, ar);
+        return;
+      }
+      p(cal, ar);
+    };
+  })(window, "https://app.cal.com/embed/embed.js", "init");
+
+  Cal("init", "{{ .namespace }}", {origin:"https://app.cal.com"});
+
+  var calConfig = {
+    "layout":"{{ .layout }}",
+    "useSlotsViewOnSmallScreen":"{{ .use_slots_view_on_small_screen }}"
+  };
+
+  {{ if $chargily.enabled }}
+  calConfig.hideEventTypeDetails = true;
+  calConfig.theme = "light";
+  calConfig.styles = {"branding":{"brandColor":"{{ $settings.primary_color }}"}};
+  {{ end }}
+
+  Cal.ns["{{ .namespace }}"]("inline", {
+    elementOrSelector:"#my-cal-inline-{{ .namespace }}",
+    config: calConfig,
+    calLink: "{{ .cal_link }}"
+  });
+
+  Cal.ns["{{ .namespace }}"]("ui", {
+    "hideEventTypeDetails":{{ .hide_event_type_details }},
+    "layout":"{{ .layout }}"
+  });
+
+  {{ if $chargily.enabled }}
+  // Enhanced booking flow for Chargily integration
+  Cal.ns["{{ .namespace }}"]("on", {
+    action: "bookingCreated",
+    callback: function(event) {
+      console.log('Booking created:', event);
+
+      // Store booking data for payment processing
+      var bookingData = {
+        bookingId: event.data.uid,
+        eventType: event.data.eventType.title,
+        customerEmail: event.data.attendees[0].email,
+        slotStart: event.data.startTime,
+        slotEnd: event.data.endTime,
+        amount: (event.data.eventType.metadata && event.data.eventType.metadata.amount) || 1500,
+        currency: "{{ $chargily.currency }}",
+        description: "Payment for " + event.data.eventType.title
+      };
+
+      // Store in sessionStorage for payment processing
+      sessionStorage.setItem('pendingBooking', JSON.stringify(bookingData));
+
+      // Show payment modal
+      if (typeof showChargilyPaymentModal === 'function') {
+        showChargilyPaymentModal(bookingData);
+      }
+    }
+  });
+  {{ end }}
+</script>
+<!-- Cal inline embed code ends -->

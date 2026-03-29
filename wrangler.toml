@@ -1,0 +1,39 @@
+name = "hugo-cal-chargily-booking"
+pages_build_output_dir = "public"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+# Environment variables for different stages
+[env.production]
+vars = { 
+  ENVIRONMENT = "production",
+  HUGO_ENV = "production"
+}
+
+[env.development]
+vars = { 
+  ENVIRONMENT = "development",
+  HUGO_ENV = "development"
+}
+
+# KV namespaces for data storage
+[[kv_namespaces]]
+binding = "PAYMENTS_KV"
+id = "your-payments-kv-namespace-id"
+preview_id = "your-payments-kv-preview-id"
+
+[[kv_namespaces]]
+binding = "BOOKINGS_KV"
+id = "your-bookings-kv-namespace-id"
+preview_id = "your-bookings-kv-preview-id"
+
+# D1 database (optional, for more complex data)
+[[d1_databases]]
+binding = "DB"
+database_name = "hugo-booking-db"
+database_id = "your-database-id"
+
+# R2 storage (for digital products)
+[[r2_buckets]]
+binding = "PRODUCTS_BUCKET"
+bucket_name = "digital-products"

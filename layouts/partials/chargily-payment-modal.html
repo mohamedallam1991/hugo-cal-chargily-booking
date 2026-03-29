@@ -1,0 +1,302 @@
+{{ $config := site.Data.cal_config }} {{ $chargily := $config.chargily }} {{
+$settings := $config.default_settings }} {{ $ui := $config.ui }} {{ if
+$chargily.enabled }}
+<!-- Chargily Payment Modal -->
+<div
+  id="chargilyPaymentModal"
+  class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50"
+>
+  <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4 relative">
+    <!-- Close Button -->
+    <button
+      onclick="hideChargilyPaymentModal()"
+      class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+    >
+      <svg
+        class="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M6 18L18 6M6 6l12 12"
+        />
+      </svg>
+    </button>
+
+    <div class="text-center space-y-6">
+      <!-- Header -->
+      <div class="space-y-2">
+        <h3 class="text-2xl font-bold text-gray-900">
+          {{ $ui.payment_modal.title }}
+        </h3>
+        <p class="text-gray-600">{{ $ui.payment_modal.subtitle }}</p>
+      </div>
+
+      <!-- Booking Summary -->
+      <div
+        id="bookingSummary"
+        class="border rounded-lg p-4 text-left space-y-3"
+      >
+        <div class="flex justify-between">
+          <span class="font-medium text-gray-700">Service:</span>
+          <span class="text-gray-900" id="summaryService"
+            >Consultation Call</span
+          >
+        </div>
+        <div class="flex justify-between">
+          <span class="font-medium text-gray-700">Date & Time:</span>
+          <span class="text-gray-900" id="summaryDateTime">-</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="font-medium text-gray-700">Duration:</span>
+          <span class="text-gray-900" id="summaryDuration">30 minutes</span>
+        </div>
+        <div class="border-t pt-3">
+          <div class="flex justify-between">
+            <span class="font-bold text-gray-900">Total Amount:</span>
+            <span class="font-bold text-lg text-green-600" id="summaryAmount"
+              >1500 DZD</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Methods -->
+      <div class="space-y-3">
+        <p class="text-sm text-gray-600">Choose your payment method:</p>
+        <div class="grid grid-cols-3 gap-2">
+          <div
+            class="text-center p-2 border rounded-lg hover:bg-gray-50 cursor-pointer"
+          >
+            <div class="text-2xl mb-1">💳</div>
+            <div class="text-xs">Card</div>
+          </div>
+          <div
+            class="text-center p-2 border rounded-lg hover:bg-gray-50 cursor-pointer"
+          >
+            <div class="text-2xl mb-1">📱</div>
+            <div class="text-xs">Edahabia</div>
+          </div>
+          <div
+            class="text-center p-2 border rounded-lg hover:bg-gray-50 cursor-pointer"
+          >
+            <div class="text-2xl mb-1">🏦</div>
+            <div class="text-xs">CIB</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Button -->
+      <button
+        id="chargilyPayButton"
+        onclick="initiateChargilyPayment()"
+        class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition flex items-center justify-center space-x-2"
+      >
+        <svg
+          class="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+          />
+        </svg>
+        <span>{{ $ui.payment_modal.button_text }}</span>
+      </button>
+
+      <!-- Security Info -->
+      <div
+        class="flex items-center justify-center space-x-4 text-xs text-gray-500"
+      >
+        <span class="flex items-center space-x-1">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2z"
+            />
+          </svg>
+          <span>{{ $ui.payment_modal.security_text }}</span>
+        </span>
+        <span>•</span>
+        <span>{{ $ui.payment_modal.instant_text }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading Overlay -->
+<div
+  id="paymentLoadingOverlay"
+  class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center z-50"
+>
+  <div class="bg-white rounded-lg p-8 max-w-sm w-full mx-4 text-center">
+    <div
+      class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"
+    ></div>
+    <h3 class="text-lg font-semibold text-gray-900 mb-2">
+      {{ $ui.payment_modal.loading_text }}
+    </h3>
+    <p class="text-gray-600">Please wait while we process your payment...</p>
+  </div>
+</div>
+
+<script>
+  // Global payment state
+  let currentBookingData = null;
+  const config = {{ $config | jsonify }};
+
+  // Payment modal functions
+  function showChargilyPaymentModal(bookingData) {
+    currentBookingData = bookingData;
+
+    // Update summary with booking data
+    document.getElementById('summaryService').textContent = bookingData.eventType || 'Consultation Call';
+    document.getElementById('summaryDateTime').textContent = formatDateTime(bookingData.slotStart);
+    document.getElementById('summaryAmount').textContent = formatCurrency(bookingData.amount || config.chargily.default_amount, bookingData.currency || config.chargily.currency);
+
+    // Show modal
+    document.getElementById('chargilyPaymentModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function hideChargilyPaymentModal() {
+    document.getElementById('chargilyPaymentModal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+    currentBookingData = null;
+  }
+
+  function showPaymentLoading() {
+    document.getElementById('paymentLoadingOverlay').style.display = 'flex';
+    hideChargilyPaymentModal();
+  }
+
+  function hidePaymentLoading() {
+    document.getElementById('paymentLoadingOverlay').style.display = 'none';
+  }
+
+  // Payment initiation
+  function initiateChargilyPayment() {
+    if (!currentBookingData) {
+      alert('Booking data not available. Please try again.');
+      return;
+    }
+
+    showPaymentLoading();
+
+    const paymentData = {
+      amount: currentBookingData.amount || config.chargily.default_amount,
+      currency: currentBookingData.currency || config.chargily.currency,
+      product: currentBookingData.eventType || 'Consultation Call',
+      description: `Payment for ${currentBookingData.eventType || 'Consultation Call'}`,
+      metadata: {
+        booking_id: currentBookingData.bookingId,
+        event_type: currentBookingData.eventType,
+        customer_email: currentBookingData.customerEmail,
+        slot_start: currentBookingData.slotStart,
+        slot_end: currentBookingData.slotEnd,
+        product_type: 'booking'
+      },
+      success_url: window.location.origin + config.chargily.success_url,
+      failure_url: window.location.origin + config.chargily.failure_url
+    };
+
+    // Create payment session
+    fetch('/api/chargily/create-payment', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(paymentData)
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.payment_url) {
+        // Redirect to Chargily payment page
+        window.location.href = data.payment_url;
+      } else {
+        hidePaymentLoading();
+        console.error('Payment creation failed:', data.error);
+        alert('Payment initialization failed: ' + (data.error || 'Unknown error'));
+      }
+    })
+    .catch(error => {
+      hidePaymentLoading();
+      console.error('Payment error:', error);
+      alert('Payment initialization failed. Please try again.');
+    });
+  }
+
+  // Utility functions
+  function formatDateTime(dateTimeString) {
+    if (!dateTimeString) return 'To be scheduled';
+
+    const date = new Date(dateTimeString);
+    return date.toLocaleString('en-US', {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
+  function formatCurrency(amount, currency) {
+    const formattedAmount = (amount / 100).toFixed(2);
+    return `${formattedAmount} ${currency.toUpperCase()}`;
+  }
+
+  // Close modal on escape key
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+      hideChargilyPaymentModal();
+    }
+  });
+
+  // Close modal on background click
+  document.getElementById('chargilyPaymentModal').addEventListener('click', function(event) {
+    if (event.target === this) {
+      hideChargilyPaymentModal();
+    }
+  });
+</script>
+
+<style>
+  #chargilyPaymentModal {
+    backdrop-filter: blur(4px);
+  }
+
+  #paymentLoadingOverlay {
+    backdrop-filter: blur(8px);
+  }
+
+  .payment-method-option {
+    transition: all 0.2s ease;
+  }
+
+  .payment-method-option:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+</style>
+{{ end }}

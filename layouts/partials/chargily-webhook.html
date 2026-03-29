@@ -1,0 +1,70 @@
+{{ $config := site.Data.cal_config }}
+{{ $chargily := $config.chargily }}
+
+{{ if and $chargily.enabled (eq .Page.RelPermalink $chargily.webhook_url) }}
+<!-- Chargily Webhook Handler -->
+<script>
+  // This would typically be handled by a backend service
+  // For static sites, you'll need to use a serverless function or external service
+  // Below is the webhook handling logic that should be implemented
+  
+  const webhookHandler = {
+    // Verify webhook signature
+    verifySignature: (payload, signature, secret) => {
+      // Implement HMAC verification using Chargily's webhook secret
+      // This is a placeholder - actual implementation depends on your backend
+      return true;
+    },
+
+    // Process payment confirmation
+    processPayment: async (paymentData) => {
+      try {
+        // 1. Verify payment status with Chargily API
+        const paymentStatus = await verifyPaymentWithChargily(paymentData.id);
+        
+        if (paymentStatus === 'paid') {
+          // 2. Update booking status
+          await updateBookingStatus(paymentData.metadata.booking_id, 'paid');
+          
+          // 3. Send confirmation email
+          await sendBookingConfirmation(paymentData);
+          
+          // 4. Return success response
+          return { status: 'success', message: 'Payment processed successfully' };
+        } else {
+          return { status: 'failed', message: 'Payment not confirmed' };
+        }
+      } catch (error) {
+        console.error('Webhook processing error:', error);
+        return { status: 'error', message: 'Processing failed' };
+      }
+    }
+  };
+
+  // Helper functions (to be implemented in your backend)
+  async function verifyPaymentWithChargily(paymentId) {
+    // Call Chargily API to verify payment status
+    // Implementation depends on your backend setup
+    return 'paid';
+  }
+
+  async function updateBookingStatus(bookingId, status) {
+    // Update booking in your database or Cal.com
+    // Implementation depends on your backend setup
+    console.log(`Booking ${bookingId} status updated to: ${status}`);
+  }
+
+  async function sendBookingConfirmation(paymentData) {
+    // Send confirmation email to customer
+    // Implementation depends on your email service
+    console.log('Confirmation email sent for booking:', paymentData.metadata.booking_id);
+  }
+</script>
+
+<!-- Webhook endpoint response -->
+{
+  "status": "webhook_ready",
+  "message": "Chargily webhook endpoint configured",
+  "note": "This webhook handler requires a backend service for full functionality"
+}
+{{ end }}

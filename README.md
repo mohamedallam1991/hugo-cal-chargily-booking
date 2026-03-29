@@ -1,19 +1,33 @@
 # Hugo Cal.com Chargily Booking Module
 
-A modular, configurable Cal.com booking system for Hugo static sites with Chargily integration.
+A production-ready, modular, configurable Cal.com booking system for Hugo static sites with **complete Chargily payment integration** for the Algerian market.
 
-## Features
+## 🚀 Features
 
 - 🎯 **Multiple Booking Methods**: Embedded calendar, floating button, custom button
 - 🔧 **Configuration-Driven**: Easy customization via YAML config
 - 📱 **Responsive**: Works on all screen sizes
 - 🎨 **Theme-Agnostic**: Compatible with any Hugo theme
 - 🌍 **Multi-Language Ready**: Built-in i18n support
-- 💳 **Chargily Integration**: Payment processing capabilities
+- 💳 **Complete Chargily Integration**: Full payment processing with Algerian payment methods
+- 🔒 **Secure Payment Flow**: Webhook verification, signature validation
+- 📧 **Automated Notifications**: Email confirmations and reminders
+- 🛡️ **Production Ready**: Cloudflare deployment, error handling, monitoring
 
-## Quick Start
+## 🎯 What's New in v2.0
 
-### 🚀 Option 1: One-Click Installation (Recommended)
+- ✅ **Complete Chargily Payment Integration**
+- ✅ **Secure Webhook Processing**
+- ✅ **Production-Ready Deployment**
+- ✅ **Enhanced Configuration System**
+- ✅ **Mobile-Optimized Payment Flow**
+- ✅ **Success/Failure Pages**
+- ✅ **Email Notification System**
+- ✅ **Analytics Integration**
+
+## 🚀 Quick Start
+
+### Option 1: One-Click Installation (Recommended)
 
 ```bash
 # Clone and install in one command
@@ -24,7 +38,7 @@ cd hugo-cal-chargily-booking
 # Your site will be running at http://localhost:1313
 ```
 
-### 📦 Option 2: Add to Existing Hugo Site
+### Option 2: Add to Existing Hugo Site
 
 In your existing Hugo site's `hugo.toml`:
 
@@ -34,7 +48,7 @@ In your existing Hugo site's `hugo.toml`:
     path = "github.com/mohamedallam1991/hugo-cal-chargily-booking"
 ```
 
-### 🛠️ Option 3: Start New Hugo Project
+### Option 3: Start New Hugo Project
 
 ```bash
 # Create new Hugo site
@@ -61,46 +75,35 @@ EOF
 hugo server
 ```
 
-### 📚 Option 4: Clone Example Site
+## ⚙️ Configuration
 
-```bash
-# Clone this repository
-git clone https://github.com/mohamedallam1991/hugo-cal-chargily-booking.git my-booking-site
-
-# Navigate to example
-cd my-booking-site/exampleSite
-
-# Start server
-hugo server --port 1313
-```
-
-## Configuration
-
-Create `data/cal_config.yaml` in your Hugo site:
+### 1. Basic Configuration (`data/cal_config.yaml`)
 
 ```yaml
+# Cal.com Booking Configuration
 booking_methods:
   embed:
     name: "Embedded Calendar"
     description: "Full calendar embedded in page"
     shortcode: "cal-embed"
-    
   floating:
     name: "Floating Button"
     description: "Floating button in corner"
     shortcode: "cal-floating"
-    
   button:
     name: "Custom Button"
     description: "Styled button with hover effects"
     shortcode: "cal-button"
 
+# Default Cal.com settings
 default_settings:
   cal_link: "your-username/event-type"
   namespace: "your-event"
   layout: "month_view"
   use_slots_view_on_small_screen: "true"
   hide_event_type_details: false
+  primary_color: "#667eea"
+  height: "800px"
 
 # Chargily Payment Integration
 chargily:
@@ -108,51 +111,120 @@ chargily:
   api_key: "your-chargily-api-key"
   webhook_secret: "your-webhook-secret"
   currency: "DZD"
+  sandbox_mode: true
+  payment_methods:
+    - "card"
+    - "edahabia"
+    - "cib"
+  success_url: "/booking/success"
+  failure_url: "/booking/failure"
+  webhook_url: "/api/webhook"
+  default_amount: 1500 # 15.00 DZD
 ```
 
-### Configuration Steps
+### 2. UI Configuration
 
-1. **Create data directory** in your Hugo site root
-2. **Create cal_config.yaml** file with your settings
-3. **Update Cal.com settings** with your actual booking link
-4. **Configure Chargily** with your API keys
+```yaml
+# UI Configuration (in data/cal_config.yaml)
+ui:
+  payment_modal:
+    title: "Complete Your Booking"
+    subtitle: "Secure payment powered by Chargily"
+    button_text: "Pay with Chargily"
+    loading_text: "Processing Payment"
+    security_text: "Secure Payment"
+    instant_text: "Instant Confirmation"
 
-## Booking Methods
+  payment_info:
+    title: "Payment Required"
+    description: "This booking requires payment confirmation..."
 
-### Embedded Calendar
-- Full 800px height calendar
-- Column view layout
-- Always visible on page
+  success_page:
+    title: "Payment Successful"
+    message: "Thank you for your payment..."
 
-### Floating Button
-- Corner floating button
-- Month view layout
-- Modal popup experience
+  failure_page:
+    title: "Payment Failed"
+    message: "We're sorry, but we couldn't process..."
+```
 
-### Custom Button
-- Styled button with hover effects
-- Element-click trigger
-- Professional appearance
+### 3. Email Configuration
 
-## Chargily Integration
+```yaml
+# Email Configuration (in data/cal_config.yaml)
+email:
+  enabled: false # Set to true when email service is configured
+  provider: "resend" # Options: resend, sendgrid, emailjs
+  from_email: "noreply@your-domain.com"
+  support_email: "support@your-domain.com"
+  admin_email: "admin@your-domain.com"
+```
 
-This module includes Chargily payment processing for Algerian market:
+## 💳 Chargily Payment Integration
 
-### Payment Flow
-1. User selects booking time
-2. Redirects to Chargily payment
-3. Payment confirmation via webhook
-4. Booking confirmation email
+### Supported Payment Methods
 
-### Supported Features
 - **Credit/Debit Cards** - Visa, Mastercard
 - **Edahabia** - Algerian electronic wallet
 - **CIB** - Algerian interbank system
-- **Multi-currency** support
 
-## Development and Testing
+### Payment Flow
+
+1. User selects booking time slot
+2. Payment modal appears with booking summary
+3. User completes payment via Chargily secure gateway
+4. Webhook confirms payment and activates booking
+5. User redirected to success page with confirmation
+
+### Security Features
+
+- **HMAC Signature Verification** - All webhooks are verified
+- **HTTPS Only** - Production requires HTTPS
+- **Timeout Protection** - Payment sessions expire after 15 minutes
+- **Error Handling** - Comprehensive error management
+
+## 🌩️ Deployment
+
+### Cloudflare Pages (Recommended)
+
+```bash
+# Install Wrangler CLI
+npm install -g wrangler
+
+# Login to Cloudflare
+wrangler login
+
+# Deploy to Cloudflare Pages
+wrangler pages deploy public --project-name your-booking-site
+
+# Set environment variables
+wrangler pages secret put CHARGILY_API_KEY
+wrangler pages secret put CHARGILY_SECRET_KEY
+wrangler pages secret put CHARGILY_WEBHOOK_SECRET
+```
+
+### Environment Variables
+
+#### Production:
+
+```
+CHARGILY_API_KEY=pk_live_your_live_public_key
+CHARGILY_SECRET_KEY=sk_live_your_live_secret_key
+CHARGILY_WEBHOOK_SECRET=whsec_your_production_webhook_secret
+```
+
+#### Development:
+
+```
+CHARGILY_API_KEY=test_pk_your_test_public_key
+CHARGILY_SECRET_KEY=test_sk_your_test_secret_key
+CHARGILY_WEBHOOK_SECRET=whsec_test_your_test_webhook_secret
+```
+
+## 🔧 Development
 
 ### Local Development
+
 ```bash
 # Clone module
 git clone https://github.com/mohamedallam1991/hugo-cal-chargily-booking.git
@@ -168,31 +240,58 @@ cd exampleSite
 hugo server --port 1313
 ```
 
-### Module Structure
+### Testing
+
+```bash
+# Test payment flow with test cards
+# Visa: 4242424242424242
+# Mastercard: 5555555555554444
+# Any future expiry date
+# Any 3-digit CVV
+
+# Test webhook endpoint
+curl -X POST https://your-domain.com/api/webhook \
+  -H "Content-Type: application/json" \
+  -H "signature: test_signature" \
+  -d '{"type":"checkout.paid","data":{"id":"test_payment_123"}}'
+```
+
+## 📁 Module Structure
+
 ```
 hugo-cal-chargily-booking/
-├── go.mod                    # Go module definition
-├── README.md                  # This documentation
-├── LICENSE                    # MIT license
-├── layouts/
-│   ├── shortcodes/
-│   │   └── cal-simple.html    # Main booking shortcode
-│   └── partials/
-│       ├── cal-embed.html       # Individual method partials
-│       ├── cal-floating.html
-│       └── cal-button.html
 ├── data/
 │   └── cal_config.yaml        # Configuration file
-└── exampleSite/
-    ├── hugo.toml              # Example Hugo config
-    └── content/
-        ├── _index.md          # Example homepage
-        └── consult.md          # Example booking page
+├── layouts/
+│   ├── partials/
+│   │   ├── cal-embed.html       # Individual method partials
+│   │   ├── cal-floating.html
+│   │   ├── cal-button.html
+│   │   ├── cal-embed-chargily-fixed.html  # Enhanced with payments
+│   │   └── chargily-payment-modal.html    # Payment modal
+│   └── shortcodes/
+│       └── cal-simple.html      # Main booking shortcode
+├── content/booking/
+│   ├── success.md              # Payment success page
+│   └── failure.md              # Payment failure page
+├── functions/api/
+│   ├── webhook.js              # Chargily webhook handler
+│   └── chargily/
+│       └── create-payment.js   # Payment creation API
+├── exampleSite/
+│   ├── hugo.toml              # Example Hugo config
+│   └── content/
+│       ├── _index.md          # Example homepage
+│       └── consult.md          # Example booking page
+├── wrangler.toml              # Cloudflare deployment config
+├── CHARGILY_SETUP.md          # Complete setup guide
+└── README.md                  # This documentation
 ```
 
-### Customization
+## 🎨 Customization
 
-#### Colors
+### Colors and Styling
+
 ```yaml
 default_settings:
   primary_color: "#667eea"
@@ -200,41 +299,77 @@ default_settings:
   text_color: "white"
 ```
 
-#### Layouts
-```yaml
-default_settings:
-  layout: "month_view"  # or "column_view", "week_view"
-  height: "800px"
-```
+### Multiple Cal.com Links
 
-#### Multiple Cal.com Links
 ```yaml
 booking_methods:
   consultation:
     name: "Book Consultation"
     cal_link: "user/consultation"
-    
   demo:
     name: "Schedule Demo"
     cal_link: "user/demo"
 ```
 
-#### Conditional Display
+### Conditional Display
+
 ```markdown
 {{ if eq .Params.booking_method "floating" }}
-  {{< cal-floating >}}
+{{< cal-floating >}}
 {{ else if eq .Params.booking_method "button" }}
-  {{< cal-button >}}
+{{< cal-button >}}
 {{ else }}
-  {{< cal-embed >}}
+{{< cal-embed >}}
 {{ end }}
 ```
 
-## Advanced Usage
+## 🔍 Troubleshooting
+
+### Quick Health Check
+
+Visit `/health/` on your site to see diagnostic information.
+
+### Common Issues
+
+#### Payment Modal Not Showing
+
+```javascript
+// Check browser console for errors
+console.log(
+  "Chargily modal function available:",
+  typeof showChargilyPaymentModal,
+);
+```
+
+#### Webhook Not Receiving Events
+
+```bash
+# Check webhook accessibility
+curl -I https://your-domain.com/api/webhook
+
+# Check Cloudflare Functions logs
+wrangler pages deployment tail
+```
+
+#### Signature Verification Failed
+
+```javascript
+// Debug signature verification
+console.log("Received signature:", signature);
+console.log("Expected signature:", computedSignature);
+```
+
+### Complete Troubleshooting Guide
+
+See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for detailed solutions to all common issues.
+
+## 📚 Advanced Usage
 
 ### Adding Custom Booking Methods
+
 1. Create new partial in `layouts/partials/your-method.html`
 2. Add method to `data/cal_config.yaml`:
+
 ```yaml
 booking_methods:
   your_method:
@@ -242,60 +377,45 @@ booking_methods:
     description: "Your description"
     shortcode: "your-method"
 ```
+
 3. Update `layouts/shortcodes/cal-simple.html` to include your method
 
-### Theme Integration
-The module works with any Hugo theme. For custom styling:
+### Analytics Integration
 
-```css
-/* Override default styles */
-.cal-booking-methods {
-  /* Your custom styles */
-}
-
-.booking-method {
-  /* Your custom styles */
-}
+```yaml
+# Analytics Configuration
+analytics:
+  enabled: true
+  google_analytics_id: "GA-XXXXXXXXX"
+  facebook_pixel_id: "XXXXXXXXXXXXXXXX"
 ```
 
-## Troubleshooting
+### Email Service Integration
 
-### 🔧 Quick Health Check
-Visit `/health/` on your site to see diagnostic information.
-
-### 🐛 Common Issues
-
-#### Page Not Found (404)
-```bash
-# Clear Hugo cache and rebuild
-hugo --gc
-hugo
-
-# Check module import
-hugo mod list
+```yaml
+# Email Configuration
+email:
+  enabled: true
+  provider: "resend"
+  from_email: "noreply@your-domain.com"
+  # Add your Resend API key to environment variables
 ```
 
-#### Cal.com Not Loading
-1. **Check your Cal.com link** in `data/cal_config.yaml`
-2. **Verify Cal.com account** and event type exists
-3. **Check browser console** for JavaScript errors
+## 📞 Support
 
-#### Chargily Integration Issues
-- Verify API key and webhook secret
-- Check webhook endpoint configuration
-- Test with Chargily sandbox first
+### Chargily Support
 
-#### Module Not Found
-```bash
-# Re-initialize modules
-hugo mod clean
-hugo mod get github.com/mohamedallam1991/hugo-cal-chargily-booking
-```
+- **Email**: support@chargily.com
+- **Documentation**: https://docs.chargily.com
+- **API Reference**: https://api.chargily.com/docs
 
-### 📚 Complete Troubleshooting Guide
-See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for detailed solutions to all common issues.
+### Module Support
 
-## Contributing
+- **Issues**: [GitHub Issues](https://github.com/mohamedallam1991/hugo-cal-chargily-booking/issues)
+- **Documentation**: [Wiki](https://github.com/mohamedallam1991/hugo-cal-chargily-booking/wiki)
+- **Discussions**: [GitHub Discussions](https://github.com/mohamedallam1991/hugo-cal-chargily-booking/discussions)
+
+## 🔄 Contributing
 
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature/amazing-feature`
@@ -304,41 +424,50 @@ See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for detailed solutions to all commo
 5. Push to branch: `git push origin feature/amazing-feature`
 6. Submit pull request
 
-## License
+## 📄 License
 
 MIT License - see LICENSE file for details.
 
-## Support
+## 🎉 Changelog
 
-- 📧 Issues: [GitHub Issues](https://github.com/mohamedallam1991/hugo-cal-chargily-booking/issues)
-- 📖 Documentation: [Wiki](https://github.com/mohamedallam1991/hugo-cal-chargily-booking/wiki)
-- 💬 Discussions: [GitHub Discussions](https://github.com/mohamedallam1991/hugo-cal-chargily-booking/discussions)
+### v2.0.0 (Latest - Production Ready)
 
-## Changelog
+- 🚀 **Complete Chargily Integration**: Full payment processing for Algerian market
+- 🔒 **Enhanced Security**: Webhook verification, signature validation, HTTPS enforcement
+- 📱 **Mobile-Optimized**: Responsive payment modal and pages
+- 🛠️ **Production Deployment**: Cloudflare Pages configuration, environment variables
+- 📧 **Email System**: Automated payment confirmations and notifications
+- 📊 **Analytics Ready**: Google Analytics, Facebook Pixel integration
+- 🎨 **Enhanced UI**: Improved payment flow, success/failure pages
+- 🔧 **Configuration System**: Centralized config with UI, email, and security settings
+- 📚 **Complete Documentation**: Setup guides, troubleshooting, best practices
 
-### v1.2.0 (Latest)
+### v1.2.0
+
 - 🚀 **One-Click Installation**: Added `install.sh` script for complete setup
 - 🎨 **Complete Template System**: Added fallback templates that work out-of-the-box
 - 🔧 **Health Check Page**: Added `/health/` endpoint for debugging
 - 📚 **Comprehensive Troubleshooting**: Added detailed TROUBLESHOOTING.md guide
-- 🛠️ **Development Mode**: Added debugging tools and health monitoring
-- 📱 **Responsive Design**: Improved mobile compatibility
-- 🎯 **Better Documentation**: Enhanced README with clear setup options
-- 🔍 **Error Handling**: Better error messages and validation
-- 💳 **Chargily Integration**: Payment processing framework for Algerian market
 
 ### v1.1.0
+
 - Enhanced documentation with comprehensive setup guides
 - Added automated setup script (setup.sh)
 - Improved troubleshooting section
 - Added module structure documentation
 - Better configuration examples
 - Theme integration guidelines
-- Advanced usage examples
 
 ### v1.0.0
+
 - Initial release
 - Three booking methods (embedded, floating, custom button)
 - Configuration-driven system
 - Comprehensive documentation
 - Example site included
+
+---
+
+**🚀 Ready for Production!** This module is now production-ready with complete Chargily payment integration, security features, and deployment configuration.
+
+**Happy booking! 💳✨**

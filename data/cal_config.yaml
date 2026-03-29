@@ -24,3 +24,87 @@ default_settings:
   layout: "month_view"
   use_slots_view_on_small_screen: "true"
   hide_event_type_details: false
+  primary_color: "#667eea"
+  hover_color: "#5a67d8"
+  text_color: "white"
+  height: "800px"
+
+# Chargily Payment Integration
+chargily:
+  enabled: true
+  api_key: "your-chargily-api-key"
+  webhook_secret: "your-webhook-secret"
+  currency: "DZD"
+  sandbox_mode: true
+  payment_methods:
+    - "card"
+    - "edahabia"
+    - "cib"
+  success_url: "/booking/success"
+  failure_url: "/booking/failure"
+  webhook_url: "/api/webhook"
+  default_amount: 1500 # Default amount in cents (1500 = 15.00 DZD)
+
+# UI Configuration
+ui:
+  payment_modal:
+    title: "Complete Your Booking"
+    subtitle: "Secure payment powered by Chargily"
+    button_text: "Pay with Chargily"
+    loading_text: "Processing Payment"
+    security_text: "Secure Payment"
+    instant_text: "Instant Confirmation"
+
+  payment_info:
+    title: "Payment Required"
+    description: "This booking requires payment confirmation. You will be redirected to our secure payment partner after selecting your time slot."
+
+  success_page:
+    title: "Payment Successful"
+    message: "Thank you for your payment. Your booking has been confirmed and is now active."
+    calendar_title: "Add to Your Calendar"
+
+  failure_page:
+    title: "Payment Failed"
+    message: "We're sorry, but we couldn't process your payment at this time. Please try again or use a different payment method."
+
+# Email Configuration
+email:
+  enabled: false # Set to true when email service is configured
+  provider: "resend" # Options: resend, sendgrid, emailjs
+  from_email: "noreply@your-domain.com"
+  support_email: "support@your-domain.com"
+  admin_email: "admin@your-domain.com"
+
+  templates:
+    payment_confirmation:
+      subject: "Payment Confirmation - Your Booking is Confirmed"
+    payment_failed:
+      subject: "Payment Failed - Action Required"
+    booking_reminder:
+      subject: "Reminder: Upcoming Booking"
+
+# Analytics Configuration
+analytics:
+  enabled: false
+  google_analytics_id: ""
+  facebook_pixel_id: ""
+
+# Security Configuration
+security:
+  webhook_timeout: 30000 # Webhook timeout in milliseconds
+  payment_timeout: 900000 # Payment session timeout in milliseconds (15 minutes)
+  max_retries: 3 # Maximum retry attempts for failed payments
+
+# Development Configuration
+development:
+  debug_mode: false
+  test_mode: true
+  log_level: "info" # Options: debug, info, warn, error
+
+# Production Configuration
+production:
+  debug_mode: false
+  test_mode: false
+  log_level: "warn"
+  minify_assets: true

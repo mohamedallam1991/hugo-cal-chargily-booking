@@ -1,5 +1,8 @@
 {{ $config := site.Data.cal_config }} {{ $settings := $config.default_settings
-}}
+}} {{ $chargily := $config.chargily }}
+
+<!-- Chargily Payment Modal -->
+{{ partial "chargily-payment-modal.html" . }}
 
 <div class="cal-booking-methods" style="margin: 2rem 0">
   <h3 style="margin-bottom: 1.5rem; color: #2d3748">
@@ -19,21 +22,64 @@
     <h4 style="margin-bottom: 1rem; color: #4a5568">{{ .name }}</h4>
     <p style="color: #718096; margin-bottom: 1rem">{{ .description }}</p>
 
-    {{ if eq .shortcode "cal-embed" }} {{ partial .shortcode (dict "cal_link"
-    $settings.cal_link "namespace" $settings.namespace "layout" $settings.layout
+    {{ if eq .shortcode "cal-embed" }} {{ if $chargily.enabled }} {{ partial
+    "cal-embed-chargily-fixed" (dict "cal_link" $settings.cal_link "namespace"
+    $settings.namespace "layout" $settings.layout
     "use_slots_view_on_small_screen" $settings.use_slots_view_on_small_screen
-    "hide_event_type_details" $settings.hide_event_type_details) }} {{ else if
-    eq .shortcode "cal-floating" }} {{ partial .shortcode (dict "cal_link"
-    $settings.cal_link "namespace" $settings.namespace "layout" $settings.layout
+    "hide_event_type_details" $settings.hide_event_type_details) }} {{ else }}
+    {{ partial "cal-embed" (dict "cal_link" $settings.cal_link "namespace"
+    $settings.namespace "layout" $settings.layout
     "use_slots_view_on_small_screen" $settings.use_slots_view_on_small_screen
-    "hide_event_type_details" $settings.hide_event_type_details) }} {{ else if
-    eq .shortcode "cal-button" }} {{ partial .shortcode (dict "cal_link"
-    $settings.cal_link "namespace" $settings.namespace "layout" $settings.layout
+    "hide_event_type_details" $settings.hide_event_type_details) }} {{ end }} {{
+    else if eq .shortcode "cal-floating" }} {{ partial "cal-floating" (dict
+    "cal_link" $settings.cal_link "namespace" $settings.namespace "layout"
+    $settings.layout "use_slots_view_on_small_screen"
+    $settings.use_slots_view_on_small_screen "hide_event_type_details"
+    $settings.hide_event_type_details) }} {{ else if eq .shortcode "cal-button"
+    }} {{ partial "cal-button" (dict "cal_link" $settings.cal_link "namespace"
+    $settings.namespace "layout" $settings.layout
     "use_slots_view_on_small_screen" $settings.use_slots_view_on_small_screen
     "hide_event_type_details" $settings.hide_event_type_details) }} {{ end }}
   </div>
   {{ end }}
 </div>
+
+{{ if $chargily.enabled }}
+<!-- Chargily Payment Information -->
+<div class="chargily-info" style="margin: 2rem 0">
+  <div
+    style="
+      background: #f0f9ff;
+      border: 1px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 1rem;
+      color: #0c4a6e;
+    "
+  >
+    <h4 style="margin-bottom: 0.5rem; color: #0369a1">💳 Payment Required</h4>
+    <p style="margin-bottom: 0.5rem; font-size: 0.9rem">
+      This booking requires payment confirmation. You will be redirected to our
+      secure payment partner after selecting your time slot.
+    </p>
+    <div
+      style="display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap"
+    >
+      {{ range $chargily.payment_methods }}
+      <span
+        style="
+          background: #e0f2fe;
+          color: #0369a1;
+          padding: 0.25rem 0.5rem;
+          border-radius: 4px;
+          font-size: 0.875rem;
+        "
+        >{{ . | title }}</span
+      >
+      {{ end }}
+    </div>
+  </div>
+</div>
+{{ end }}
 
 <style>
   .cal-booking-methods {
@@ -51,5 +97,20 @@
   .booking-method:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .chargily-info {
+    animation: fadeIn 0.5s ease-in;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 </style>

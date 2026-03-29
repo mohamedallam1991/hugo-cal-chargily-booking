@@ -1,0 +1,119 @@
+{{ $config := site.Data.cal_config }}
+{{ $chargily := $config.chargily }}
+
+{{ if $chargily.enabled }}
+<!-- Chargily Payment Integration -->
+<script src="https://cdn.chargily.com/chargily.js"></script>
+<script>
+  // Chargily payment configuration
+  const chargilyConfig = {
+    apiKey: {{ $chargily.api_key | jsonify }},
+    sandbox: {{ $chargily.sandbox_mode }},
+    currency: {{ $chargily.currency | jsonify }},
+    paymentMethods: {{ $chargily.payment_methods | jsonify }},
+    successUrl: {{ $chargily.success_url | jsonify }},
+    failureUrl: {{ $chargily.failure_url | jsonify }}
+  };
+
+  // Initialize Chargily
+  function initChargilyPayment(bookingData) {
+    const paymentData = {
+      amount: bookingData.amount || 1000, // Default amount in cents
+      description: bookingData.description || 'Booking Payment',
+      metadata: {
+        booking_id: bookingData.bookingId,
+        event_type: bookingData.eventType,
+        customer_email: bookingData.customerEmail,
+        slot_start: bookingData.slotStart,
+        slot_end: bookingData.slotEnd
+      }
+    };
+
+    // Create payment session
+    fetch('/api/chargily/create-payment', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(paymentData)
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.payment_url) {
+        // Redirect to Chargily payment page
+        window.location.href = data.payment_url;
+      } else {
+        console.error('Payment creation failed:', data.error);
+        alert('Payment initialization failed. Please try again.');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Payment initialization failed. Please try again.');
+    });
+  }
+
+  // Hook into Cal.com booking events
+  window.addEventListener('message', function(event) {
+    if (event.data.type === 'cal.com:booking:created') {
+      const bookingData = event.data.payload;
+      
+      // Redirect to payment if Chargily is enabled
+      if (chargilyConfig.apiKey && chargilyConfig.apiKey !== 'your-chargily-api-key') {
+        initChargilyPayment({
+          bookingId: bookingData.uid,
+          eventType: bookingData.eventType.title,
+          customerEmail: bookingData.attendees[0].email,
+          slotStart: bookingData.startTime,
+          slotEnd: bookingData.endTime,
+          amount: bookingData.eventType.metadata?.amount || 1000,
+          description: `Payment for ${bookingData.eventType.title}`
+        });
+      }
+    }
+  });
+
+  // Payment status check
+  function checkPaymentStatus(bookingId) {
+    return fetch(`/api/chargily/payment-status/${bookingId}`)
+      .then(response => response.json())
+      .then(data => data.status);
+  }
+</script>
+
+<style>
+  .chargily-payment-info {
+    background: #f0f9ff;
+    border: 1px solid #0ea5e9;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+    color: #0c4a6e;
+  }
+
+  .chargily-payment-methods {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .payment-method-badge {
+    background: #e0f2fe;
+    color: #0369a1;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+  }
+</style>
+
+<div class="chargily-payment-info">
+  <strong>💳 Payment Required</strong>
+  <p>This booking requires payment confirmation. You will be redirected to our secure payment partner after selecting your time slot.</p>
+  <div class="chargily-payment-methods">
+    {{ range $chargily.payment_methods }}
+    <span class="payment-method-badge">{{ . | title }}</span>
+    {{ end }}
+  </div>
+</div>
+{{ end }}
