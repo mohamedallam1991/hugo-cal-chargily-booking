@@ -1,6 +1,6 @@
 baseURL = "https://example.com/"
 languageCode = "en-us"
-title = "Hugo Cal.com Chargily Booking Example"
+title = "Hugo Cal.com Chargily Booking Module Test"
 
 [module]
   [[module.imports]]

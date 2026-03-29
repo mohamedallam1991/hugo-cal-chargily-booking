@@ -13,9 +13,9 @@ A modular, configurable Cal.com booking system for Hugo static sites with Chargi
 
 ## Quick Start
 
-### 1. Add to your Hugo site
+### Option 1: Add to Existing Hugo Site
 
-In your `hugo.toml`:
+In your existing Hugo site's `hugo.toml`:
 
 ```toml
 [module]
@@ -23,19 +23,49 @@ In your `hugo.toml`:
     path = "github.com/mohamedallam1991/hugo-cal-chargily-booking"
 ```
 
-### 2. Use in your content
+### Option 2: Start New Hugo Project
 
-```markdown
+```bash
+# Create new Hugo site
+hugo new site my-booking-site
+
+# Add module to hugo.toml
+cat >> hugo.toml << 'EOF'
+[module]
+  [[module.imports]]
+    path = "github.com/mohamedallam1991/hugo-cal-chargily-booking"
+EOF
+
+# Create booking page
+mkdir -p content
+cat > content/consult.md << 'EOF'
 ---
 title: "Book a Consultation"
 ---
 
 {{< cal-simple >}}
+EOF
+
+# Start development server
+hugo server
+```
+
+### Option 3: Clone Example Site
+
+```bash
+# Clone this repository
+git clone https://github.com/mohamedallam1991/hugo-cal-chargily-booking.git my-booking-site
+
+# Navigate to example
+cd my-booking-site/exampleSite
+
+# Start server
+hugo server --port 1313
 ```
 
 ## Configuration
 
-Create `data/cal-config.yaml` in your Hugo site:
+Create `data/cal_config.yaml` in your Hugo site:
 
 ```yaml
 booking_methods:
@@ -68,6 +98,13 @@ chargily:
   webhook_secret: "your-webhook-secret"
   currency: "DZD"
 ```
+
+### Configuration Steps
+
+1. **Create data directory** in your Hugo site root
+2. **Create cal_config.yaml** file with your settings
+3. **Update Cal.com settings** with your actual booking link
+4. **Configure Chargily** (optional) with your API keys
 
 ## Booking Methods
 
@@ -107,9 +144,51 @@ This module includes Chargily payment processing for Algerian market:
 - **CIB** - Algerian interbank system
 - **Multi-currency** support
 
-## Customization
+## Development and Testing
 
-### Colors
+### Local Development
+
+```bash
+# Clone module
+git clone https://github.com/mohamedallam1991/hugo-cal-chargily-booking.git
+
+# Navigate to module
+cd hugo-cal-chargily-booking
+
+# Start development server
+hugo server --port 1314
+
+# Or test example site
+cd exampleSite
+hugo server --port 1313
+```
+
+### Module Structure
+
+```
+hugo-cal-chargily-booking/
+├── go.mod                    # Go module definition
+├── README.md                  # This documentation
+├── LICENSE                    # MIT license
+├── layouts/
+│   ├── shortcodes/
+│   │   └── cal-simple.html    # Main booking shortcode
+│   └── partials/
+│       ├── cal-embed.html       # Individual method partials
+│       ├── cal-floating.html
+│       └── cal-button.html
+├── data/
+│   └── cal_config.yaml        # Configuration file
+└── exampleSite/
+    ├── hugo.toml              # Example Hugo config
+    └── content/
+        ├── _index.md          # Example homepage
+        └── consult.md          # Example booking page
+```
+
+### Customization
+
+#### Colors
 
 ```yaml
 default_settings:
@@ -118,7 +197,7 @@ default_settings:
   text_color: "white"
 ```
 
-### Layouts
+#### Layouts
 
 ```yaml
 default_settings:
@@ -126,9 +205,7 @@ default_settings:
   height: "800px"
 ```
 
-## Advanced Usage
-
-### Multiple Cal.com Links
+#### Multiple Cal.com Links
 
 ```yaml
 booking_methods:
@@ -141,7 +218,7 @@ booking_methods:
     cal_link: "user/demo"
 ```
 
-### Conditional Display
+#### Conditional Display
 
 ```markdown
 {{ if eq .Params.booking_method "floating" }}
@@ -153,22 +230,72 @@ booking_methods:
 {{ end }}
 ```
 
-## Development
+## Advanced Usage
 
-### Local Development
+### Adding Custom Booking Methods
 
-```bash
-git clone https://github.com/mohamedallam1991/hugo-cal-chargily-booking
-cd hugo-cal-chargily-booking
-hugo server -s exampleSite
+1. Create new partial in `layouts/partials/your-method.html`
+2. Add method to `data/cal_config.yaml`:
+
+```yaml
+booking_methods:
+  your_method:
+    name: "Your Method"
+    description: "Your description"
+    shortcode: "your-method"
 ```
 
-### Contributing
+3. Update `layouts/shortcodes/cal-simple.html` to include your method
+
+### Theme Integration
+
+The module works with any Hugo theme. For custom styling:
+
+```css
+/* Override default styles */
+.cal-booking-methods {
+  /* Your custom styles */
+}
+
+.booking-method {
+  /* Your custom styles */
+}
+```
+
+## Troubleshooting
+
+### Common Issues
+
+#### Module Not Found
+
+```bash
+# Clear Hugo cache
+hugo --gc
+
+# Rebuild dependencies
+hugo mod get -u
+```
+
+#### Cal.com Not Loading
+
+- Check your `cal_link` configuration
+- Verify Cal.com account and event type
+- Check browser console for errors
+
+#### Chargily Integration Issues
+
+- Verify API key and webhook secret
+- Check webhook endpoint configuration
+- Test with Chargily sandbox first
+
+## Contributing
 
 1. Fork the repository
-2. Create feature branch
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
 3. Make your changes
-4. Submit pull request
+4. Commit changes: `git commit -m 'Add amazing feature'`
+5. Push to branch: `git push origin feature/amazing-feature`
+6. Submit pull request
 
 ## License
 
@@ -179,3 +306,14 @@ MIT License - see LICENSE file for details.
 - 📧 Issues: [GitHub Issues](https://github.com/mohamedallam1991/hugo-cal-chargily-booking/issues)
 - 📖 Documentation: [Wiki](https://github.com/mohamedallam1991/hugo-cal-chargily-booking/wiki)
 - 💬 Discussions: [GitHub Discussions](https://github.com/mohamedallam1991/hugo-cal-chargily-booking/discussions)
+
+## Changelog
+
+### v1.0.0
+
+- Initial release
+- Three booking methods (embedded, floating, custom button)
+- Configuration-driven system
+- Chargily integration framework
+- Comprehensive documentation
+- Example site included

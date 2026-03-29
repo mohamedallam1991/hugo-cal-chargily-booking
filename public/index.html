@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+	<meta name="generator" content="Hugo 0.159.1"><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1314&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hugo Cal.com Chargily Booking Module - Hugo Cal.com Chargily Booking Module Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 2rem;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 { color: #2d3748; }
+        h2 { color: #4a5568; }
+        h3 { color: #718096; }
+        code {
+            background: #f7fafc;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        pre {
+            background: #f7fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+<h1>Hugo Cal.com Chargily Booking Module</h1>
+<h1 id="hugo-calcom-chargily-booking-module">Hugo Cal.com Chargily Booking Module</h1>
+<p>A modular, configurable Cal.com booking system for Hugo static sites with Chargily integration.</p>
+<h2 id="quick-test">Quick Test</h2>
+<p>Below is a test of the booking module:</p>
+ 
+
+<div class="cal-booking-methods" style="margin: 2rem 0">
+  <h3 style="margin-bottom: 1.5rem; color: #2d3748">
+    Choose Your Booking Method
+  </h3>
+
+  
+  <div
+    class="booking-method"
+    style="
+      background: #f7fafc;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    "
+  >
+    <h4 style="margin-bottom: 1rem; color: #4a5568">Custom Button</h4>
+    <p style="color: #718096; margin-bottom: 1rem">Styled button with hover effects</p>
+
+     
+<script type="text/javascript">
+  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+Cal("init", "discovery-call", {origin:"https://app.cal.com"});
+
+  Cal.ns["discovery-call"]("ui", {"hideEventTypeDetails": false ,"layout":"month_view"});
+  </script>
+
+
+<button 
+  data-cal-link="mohamedallam/discovery-call" 
+  data-cal-namespace="discovery-call" 
+  data-cal-config='{"layout":"month_view","useSlotsViewOnSmallScreen":"true"}'
+  style="background: #667eea; color: white; padding: 1rem 2rem; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin: 1rem 0; display: inline-block;"
+  onmouseover="this.style.background='#5a67d8'; this.style.transform='translateY(-2px)';"
+  onmouseout="this.style.background='#667eea'; this.style.transform='translateY(0)';"
+>
+  📅 Book via Custom Button
+</button>
+ 
+  </div>
+  
+  <div
+    class="booking-method"
+    style="
+      background: #f7fafc;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    "
+  >
+    <h4 style="margin-bottom: 1rem; color: #4a5568">Embedded Calendar</h4>
+    <p style="color: #718096; margin-bottom: 1rem">Full calendar embedded in page</p>
+
+     
+<div style="width:100%; height:800px; overflow:scroll" id="my-cal-inline-discovery-call"></div>
+<script type="text/javascript">
+  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+Cal("init", "discovery-call", {origin:"https://app.cal.com"});
+
+  Cal.ns["discovery-call"]("inline", {
+    elementOrSelector:"#my-cal-inline-discovery-call",
+    config: {"layout":"month_view","useSlotsViewOnSmallScreen":"true"},
+    calLink: "mohamedallam\/discovery-call"
+  });
+
+  Cal.ns["discovery-call"]("ui", {"hideEventTypeDetails": false ,"layout":"month_view"});
+  </script>
+
+ 
+  </div>
+  
+  <div
+    class="booking-method"
+    style="
+      background: #f7fafc;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    "
+  >
+    <h4 style="margin-bottom: 1rem; color: #4a5568">Floating Button</h4>
+    <p style="color: #718096; margin-bottom: 1rem">Floating button in corner</p>
+
+     
+<script type="text/javascript">
+  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+Cal("init", "discovery-call", {origin:"https://app.cal.com"});
+
+  Cal.ns["discovery-call"]("floatingButton", {"calLink":"mohamedallam\/discovery-call","config":{"layout":"month_view","useSlotsViewOnSmallScreen":"true"}}); 
+  Cal.ns["discovery-call"]("ui", {"hideEventTypeDetails": false ,"layout":"month_view"});
+  </script>
+
+ 
+  </div>
+  
+</div>
+
+<style>
+  .cal-booking-methods {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .booking-method {
+    border: 1px solid #e2e8f0;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .booking-method:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+</style>
+
+<h2 id="features">Features</h2>
+<ul>
+<li>🎯 <strong>Multiple Booking Methods</strong>: Embedded calendar, floating button, custom button</li>
+<li>🔧 <strong>Configuration-Driven</strong>: Easy customization via YAML config</li>
+<li>📱 <strong>Responsive</strong>: Works on all screen sizes</li>
+<li>🎨 <strong>Theme-Agnostic</strong>: Compatible with any Hugo theme</li>
+<li>💳 <strong>Chargily Integration</strong>: Payment processing capabilities</li>
+</ul>
+<h2 id="configuration">Configuration</h2>
+<p>The module uses <code>data/cal-config.yaml</code> for configuration. You can customize:</p>
+<ul>
+<li>Booking methods</li>
+<li>Cal.com integration</li>
+<li>Chargily payment settings</li>
+<li>Visual styling</li>
+</ul>
+<h2 id="usage">Usage</h2>
+<p>Add this module to your Hugo site:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-toml" data-lang="toml"><span style="display:flex;"><span>[<span style="color:#a6e22e">module</span>]
+</span></span><span style="display:flex;"><span>  [[<span style="color:#a6e22e">module</span>.<span style="color:#a6e22e">imports</span>]]
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">path</span> = <span style="color:#e6db74">&#34;github.com/mohamedallam1991/hugo-cal-chargily-booking&#34;</span>
+</span></span></code></pre></div><p>Then use the shortcode in your content:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-markdown" data-lang="markdown"><span style="display:flex;"><span> 
+
+<div class="cal-booking-methods" style="margin: 2rem 0">
+  <h3 style="margin-bottom: 1.5rem; color: #2d3748">
+    Choose Your Booking Method
+  </h3>
+
+  
+  <div
+    class="booking-method"
+    style="
+      background: #f7fafc;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    "
+  >
+    <h4 style="margin-bottom: 1rem; color: #4a5568">Custom Button</h4>
+    <p style="color: #718096; margin-bottom: 1rem">Styled button with hover effects</p>
+
+     
+<script type="text/javascript">
+  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+Cal("init", "discovery-call", {origin:"https://app.cal.com"});
+
+  Cal.ns["discovery-call"]("ui", {"hideEventTypeDetails": false ,"layout":"month_view"});
+  </script>
+
+
+<button 
+  data-cal-link="mohamedallam/discovery-call" 
+  data-cal-namespace="discovery-call" 
+  data-cal-config='{"layout":"month_view","useSlotsViewOnSmallScreen":"true"}'
+  style="background: #667eea; color: white; padding: 1rem 2rem; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin: 1rem 0; display: inline-block;"
+  onmouseover="this.style.background='#5a67d8'; this.style.transform='translateY(-2px)';"
+  onmouseout="this.style.background='#667eea'; this.style.transform='translateY(0)';"
+>
+  📅 Book via Custom Button
+</button>
+ 
+  </div>
+  
+  <div
+    class="booking-method"
+    style="
+      background: #f7fafc;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    "
+  >
+    <h4 style="margin-bottom: 1rem; color: #4a5568">Embedded Calendar</h4>
+    <p style="color: #718096; margin-bottom: 1rem">Full calendar embedded in page</p>
+
+     
+<div style="width:100%; height:800px; overflow:scroll" id="my-cal-inline-discovery-call"></div>
+<script type="text/javascript">
+  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+Cal("init", "discovery-call", {origin:"https://app.cal.com"});
+
+  Cal.ns["discovery-call"]("inline", {
+    elementOrSelector:"#my-cal-inline-discovery-call",
+    config: {"layout":"month_view","useSlotsViewOnSmallScreen":"true"},
+    calLink: "mohamedallam\/discovery-call"
+  });
+
+  Cal.ns["discovery-call"]("ui", {"hideEventTypeDetails": false ,"layout":"month_view"});
+  </script>
+
+ 
+  </div>
+  
+  <div
+    class="booking-method"
+    style="
+      background: #f7fafc;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    "
+  >
+    <h4 style="margin-bottom: 1rem; color: #4a5568">Floating Button</h4>
+    <p style="color: #718096; margin-bottom: 1rem">Floating button in corner</p>
+
+     
+<script type="text/javascript">
+  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+Cal("init", "discovery-call", {origin:"https://app.cal.com"});
+
+  Cal.ns["discovery-call"]("floatingButton", {"calLink":"mohamedallam\/discovery-call","config":{"layout":"month_view","useSlotsViewOnSmallScreen":"true"}}); 
+  Cal.ns["discovery-call"]("ui", {"hideEventTypeDetails": false ,"layout":"month_view"});
+  </script>
+
+ 
+  </div>
+  
+</div>
+
+<style>
+  .cal-booking-methods {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .booking-method {
+    border: 1px solid #e2e8f0;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .booking-method:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+</style>
+
+</span></span></code></pre></div>
+
+    </div>
+</body>
+</html>
