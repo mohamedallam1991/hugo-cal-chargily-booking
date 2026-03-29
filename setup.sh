@@ -150,9 +150,9 @@ default_settings:
   use_slots_view_on_small_screen: "true"
   hide_event_type_details: false
 
-# Chargily Payment Integration (optional)
+# Chargily Payment Integration
 chargily:
-  enabled: false
+  enabled: true
   api_key: "your-chargily-api-key"
   webhook_secret: "your-webhook-secret"
   currency: "DZD"
@@ -212,7 +212,7 @@ EOF
 print_status "Creating homepage"
 cat > content/_index.md << EOF
 ---
-title: "Welcome to Hugo Cal.com Chargily Booking"
+title: "Welcome to Hugo Cal.com Chargily Booking Module"
 ---
 
 # Hugo Cal.com Chargily Booking Module
@@ -235,7 +235,7 @@ Try the booking system:
 
 ## Configuration
 
-Edit \`data/cal_config.yaml\` to customize your booking settings.
+Edit \`data/cal_config.yaml\` to customize your booking settings and Chargily integration.
 
 ## Documentation
 
@@ -249,7 +249,7 @@ print_status "Booking page will be at: http://localhost:1313/consult/"
 print_status ""
 print_status "Next steps:"
 print_status "1. Update data/cal_config.yaml with your Cal.com settings"
-print_status "2. Configure Chargily integration (optional)"
+print_status "2. Configure Chargily integration with your API keys"
 print_status "3. Customize styling as needed"
 print_status "4. Test booking functionality"
 print_status ""

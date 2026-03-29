@@ -1,0 +1,46 @@
+{{ define "main" }}
+<div class="list">
+    {{ if .Title }}
+        <h1>{{ .Title }}</h1>
+    {{ end }}
+    
+    {{ if .Content }}
+        <div class="description">
+            {{ .Content }}
+        </div>
+    {{ end }}
+    
+    {{ $paginator := .Paginate .RegularPages }}
+    {{ range $paginator.Pages }}
+        <article class="card">
+            <header>
+                <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+                <div class="meta">
+                    <time datetime="{{ .Date.Format "2006-01-02" }}">
+                        {{ .Date.Format "January 2, 2006" }}
+                    </time>
+                    {{ if .Params.tags }}
+                        <div class="tags">
+                            {{ range .Params.tags }}
+                                <span class="tag">{{ . }}</span>
+                            {{ end }}
+                        </div>
+                    {{ end }}
+                </div>
+            </header>
+            {{ if .Summary }}
+                <div class="summary">
+                    {{ .Summary }}
+                </div>
+            {{ end }}
+            {{ if .Truncated }}
+                <footer>
+                    <a href="{{ .Permalink }}" class="btn">Read more</a>
+                </footer>
+            {{ end }}
+        </article>
+    {{ end }}
+    
+    {{ template "_internal/pagination.html" . }}
+</div>
+{{ end }}
