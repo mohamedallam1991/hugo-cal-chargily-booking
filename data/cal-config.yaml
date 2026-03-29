@@ -1,0 +1,26 @@
+# Cal.com Booking Configuration
+# Add new booking methods here and they'll be automatically available
+
+booking_methods:
+  embed:
+    name: "Embedded Calendar"
+    description: "Full calendar embedded in page"
+    shortcode: "cal-embed"
+    
+  floating:
+    name: "Floating Button"
+    description: "Floating button in corner"
+    shortcode: "cal-floating"
+    
+  button:
+    name: "Custom Button"
+    description: "Styled button with hover effects"
+    shortcode: "cal-button"
+
+# Default Cal.com settings
+default_settings:
+  cal_link: "your-username/event-type"
+  namespace: "your-event"
+  layout: "month_view"
+  use_slots_view_on_small_screen: "true"
+  hide_event_type_details: false

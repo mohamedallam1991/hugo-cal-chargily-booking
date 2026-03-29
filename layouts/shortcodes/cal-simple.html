@@ -1,0 +1,38 @@
+{{ $config := site.Data.cal_config }}
+{{ $settings := $config.default_settings }}
+
+<div class="cal-booking-methods" style="margin: 2rem 0;">
+  <h3 style="margin-bottom: 1.5rem; color: #2d3748;">Choose Your Booking Method</h3>
+  
+  {{ range $config.booking_methods }}
+  <div class="booking-method" style="background: #f7fafc; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;">
+    <h4 style="margin-bottom: 1rem; color: #4a5568;">{{ .name }}</h4>
+    <p style="color: #718096; margin-bottom: 1rem;">{{ .description }}</p>
+    
+    {{ if eq .shortcode "cal-embed" }}
+      {{ partial .shortcode (dict "cal_link" $settings.cal_link "namespace" $settings.namespace "layout" $settings.layout "use_slots_view_on_small_screen" $settings.use_slots_view_on_small_screen "hide_event_type_details" $settings.hide_event_type_details) }}
+    {{ else if eq .shortcode "cal-floating" }}
+      {{ partial .shortcode (dict "cal_link" $settings.cal_link "namespace" $settings.namespace "layout" $settings.layout "use_slots_view_on_small_screen" $settings.use_slots_view_on_small_screen "hide_event_type_details" $settings.hide_event_type_details) }}
+    {{ else if eq .shortcode "cal-button" }}
+      {{ partial .shortcode (dict "cal_link" $settings.cal_link "namespace" $settings.namespace "layout" $settings.layout "use_slots_view_on_small_screen" $settings.use_slots_view_on_small_screen "hide_event_type_details" $settings.hide_event_type_details) }}
+    {{ end }}
+  </div>
+  {{ end }}
+</div>
+
+<style>
+.cal-booking-methods {
+  display: grid;
+  gap: 1rem;
+}
+
+.booking-method {
+  border: 1px solid #e2e8f0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.booking-method:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+</style>

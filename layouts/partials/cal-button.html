@@ -1,0 +1,19 @@
+<!-- Cal element-click embed code begins -->
+<script type="text/javascript">
+  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+Cal("init", "{{ .namespace }}", {origin:"https://app.cal.com"});
+
+  Cal.ns["{{ .namespace }}"]("ui", {"hideEventTypeDetails":{{ .hide_event_type_details }},"layout":"{{ .layout }}"});
+  </script>
+<!-- Cal element-click embed code ends -->
+
+<button 
+  data-cal-link="{{ .cal_link }}" 
+  data-cal-namespace="{{ .namespace }}" 
+  data-cal-config='{"layout":"{{ .layout }}","useSlotsViewOnSmallScreen":"{{ .use_slots_view_on_small_screen }}"}'
+  style="background: #667eea; color: white; padding: 1rem 2rem; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin: 1rem 0; display: inline-block;"
+  onmouseover="this.style.background='#5a67d8'; this.style.transform='translateY(-2px)';"
+  onmouseout="this.style.background='#667eea'; this.style.transform='translateY(0)';"
+>
+  📅 Book via Custom Button
+</button>
